@@ -23,12 +23,21 @@
   set_fact:
     haproxy_version: '{{ haproxy_version_result.stdout_lines[0] | regex_replace("^HA-?Proxy version (\d+(\.\d+)*).*$", "\1") }}'
 
-# Set ip forwarding on in /proc and verify token value with the sysctl command
-- sysctl:
-    name: net.ipv4.ip_forward
-    value: '1'
-    sysctl_set: yes
+- name: Check if net.ipv4.ip_nonlocal_bind=1 is already defined
+  lineinfile:
+    state: absent
+    path: "/etc/sysctl.conf"
+    regexp: "^net.ipv4.ip_nonlocal_bind=1"
+  check_mode: true
+  changed_when: false # This just makes things look prettier in the logs
+  register: check
 
+- name: Define net.ipv4.ip_nonlocal_bind=1 if not undefined
+  lineinfile:
+    state: present
+    path: "/etc/sysctl.conf"
+    line: "net.ipv4.ip_nonlocal_bind=1"
+  when: check.found == 0
 
 - name: Enable sysctl 
   command: sysctl -p
@@ -48,7 +57,9 @@
   command: netstat -ntlp
   register: haproxy_status
 
-- name: Ha
+- name: Haproxy status get
+  debug:
+    msg: '{{ haproxy_status }}'
 
 - name: Ensure HAProxy is started and enabled on boot.
   service: name=haproxy state=started enabled=yes
