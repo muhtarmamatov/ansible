@@ -6,7 +6,7 @@ haproxy_group: haproxy
 
 # Frontend settings.
 haproxy_frontend_name: 'kubernetes'
-haproxy_frontend_bind_address: '192.168.0.1'
+haproxy_frontend_bind_address: '10.11.1.30'
 haproxy_frontend_port: 6443
 haproxy_frontend_mode: 'tcp'
 
@@ -19,15 +19,15 @@ haproxy_backend_tcpchk: 'tcp-check'
 
 # List of backend servers.
 haproxy_backend_servers: 
-  - name: k8s-master-0
-    address: 192.168.0.5:6443
-  - name: k8s-master-1
-    address: 192.168.0.6:6443
+  - name: k8s31-master.hl.airmanas.llc
+    address: 10.11.1.31
+  - name: k8s32-master.hl.airmanas.llc
+    address: 10.11.1.32
 
 # Extra global vars (see README for example usage).
 haproxy_global_vars: []
 
 # Default haproxy timeouts
-haproxy_connect_timeout: 3000
-haproxy_client_timeout: 5000
-haproxy_server_timeout: 5000
+haproxy_connect_timeout: 5000
+haproxy_client_timeout: 50000
+haproxy_server_timeout: 50000

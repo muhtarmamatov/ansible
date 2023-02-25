@@ -1,9 +1,12 @@
 ---
-- name: Ensure HAProxy is installed.
-  package: name=haproxy state=present
-
-- name: Ensure net-tools installed
-  package: name=net-tools state=present
+- name: Installing require packages
+  yum: 
+    name={{ item }} state=present
+  with_items: 
+    - net-tools
+    - psmisc
+    - haproxy
+    - keepalived
 
 - name: Ensure HAProxy is enabled (so init script will start it on Debian).
   lineinfile:
@@ -52,6 +55,9 @@
     mode: 0644
     validate: haproxy -f %s -c -q
   notify: restart haproxy
+
+- name:  Backup keepalived config file
+  command: mv /etc/keepalived/keepalived.conf  /etc/keepalived/keepalived.conf.back
 
 - name: Ensure haproxy listening specified port
   command: netstat -ntlp

@@ -47,4 +47,19 @@ firewalld_rules:
   - service: ssh
     permanent: true
     state: enabled
+  - rich_rule: rule family="ipv4" port port="6443" protocol="tcp" accept
+    zone: public
+    permanent: true
+    immediate: true
+    state: enabled
+  - rich_rule: rule family="ipv4" port port="8080" protocol="tcp" accept
+    zone: public
+    permanent: true
+    immediate: true
+    state: enabled
+  - rich_rule: rule family="ipv4"  protocol value="vrrp" accept
+    zone: public
+    permanent: true
+    immediate: true
+    state: enabled
     

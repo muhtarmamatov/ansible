@@ -14,3 +14,6 @@
 - name: include rules tasks
   tags: [firewalld, firewalld-rules, firewalld-config, config]
   ansible.builtin.import_tasks: rules.yml
+
+- name: allow haproxy to listen on kube-apiserver port 6443
+  command: semanage port -a -t http_cache_port_t 6443 -p tcp

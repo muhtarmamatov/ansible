@@ -1,4 +1,11 @@
 ---
+- name: Update all installed packages using YUM module
+  yum:
+    name: '*'
+    state: latest
+    update_cache: yes
+    update_only: yes
+
 - name: install Firewalld requirements (Debian)
   ansible.builtin.apt:
     name:
