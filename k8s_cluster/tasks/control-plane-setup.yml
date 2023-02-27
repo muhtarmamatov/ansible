@@ -51,8 +51,9 @@
   changed_when: "'created' in flannel_result.stdout"
   when: kubernetes_pod_network.cni == 'flannel'
 
+
 - name: Configure Calico networking.
-  command: "kubectl apply -f {{ kubernetes_calico_manifest_file }}"
+  command: "kubectl replace -f {{ kubernetes_calico_manifest_file }}"
   register: calico_result
   changed_when: "'created' in calico_result.stdout"
   when: kubernetes_pod_network.cni == 'calico'

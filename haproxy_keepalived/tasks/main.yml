@@ -59,6 +59,22 @@
 - name:  Backup keepalived config file
   command: mv /etc/keepalived/keepalived.conf  /etc/keepalived/keepalived.conf.back
 
+- name: Copy keepalived master configuration in place.
+  template:
+    src: keepalived-master.cfg.j2
+    dest: /etc/keepalived/keepalived.conf
+    mode: 0644
+  when: inventory_hostname == 'admin1.hl.airmanas.llc'
+  notify: restart keepalived
+
+- name: Copy keepalived master configuration in place.
+  template:
+    src: keepalived.slave.cfg.j2
+    dest: /etc/keepalived/keepalived.conf
+    mode: 0644
+  when: inventory_hostname == 'admin2.hl.airmanas.llc'
+  notify: restart keepalived
+  
 - name: Ensure haproxy listening specified port
   command: netstat -ntlp
   register: haproxy_status
@@ -69,3 +85,6 @@
 
 - name: Ensure HAProxy is started and enabled on boot.
   service: name=haproxy state=started enabled=yes
+
+- name: Ensure Keepalived is started and enabled on boot.
+  service: name=keepalived state=started enabled=yes
