@@ -1,0 +1,13 @@
+---
+ssh_user_list: []
+#   - name: jane_doe
+#    create_user_account: true
+#    authorized_keys:
+#      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJi3wBlOT+oR8Rd+YQsV8tUoQOd3NSUuyzJYQp8finD6 jane_doe@example.com
+#      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQDXkvy8jMmw45grnmYK+Ylk/mcc7IyG9taNseNiVrGjR8 janedoe@example.com
+
+#   - name: clack_kent
+#     create_user_account: false
+#     authorized_keys:
+#       - "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+ssh_authorized_keys_exclusive: true

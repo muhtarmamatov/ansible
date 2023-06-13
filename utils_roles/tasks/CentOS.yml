@@ -1,0 +1,75 @@
+- include_vars: "{{ ansible_os_family }}-required.yml"
+
+- name: Utils | CentOS | Install Epel repository gpg key
+  become: true
+  rpm_key:
+    state: present
+    key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
+
+- name: Utils | CentOS | Install Epel repository
+  become: true
+  yum:
+    state: latest
+    name: epel-release
+
+- name: Utils | CentOS | Install RepoForge repository
+  become: true
+  yum:
+    disable_gpg_check: yes
+    state: present
+    name: "http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el{{ ansible_distribution_major_version }}.rf.{{ ansible_architecture }}.rpm"
+  when:
+    - utils_upgrade_software
+    - ansible_distribution_major_version == "5"
+
+- name: Utils | CentOS | Update all installed software on server
+  become: true
+  yum:
+    state: latest
+    name: "*"
+  when: utils_upgrade_software
+
+- name: Utils | CentOS | Install basic utilities
+  become: true
+  yum:
+    name: "{{ item }}"
+    state: present
+  when: utils_install_basic
+  with_items: "{{ utils_list_basic }}"
+  ignore_errors: true
+
+- name: Utils | CentOS | Install network utilities
+  become: true
+  yum:
+    name: "{{ item }}"
+    state: present
+  when: utils_install_network
+  with_items: "{{ utils_list_network }}"
+  ignore_errors: true
+
+- name: Utils | CentOS | Install file system utilities
+  become: true
+  yum:
+    name: "{{ item }}"
+    state: present
+  when: utils_install_filesystem
+  with_items: "{{ utils_list_filesystem }}"
+  ignore_errors: true
+
+- name: Utils | CentOS | Install other utilities
+  become: true
+  yum:
+    name: "{{ item }}"
+    state: present
+  when: utils_install_dev
+  with_items: "{{ utils_list_dev }}"
+  ignore_errors: true
+
+- name: Utils | CentOS | Install user utilities
+  become: true
+  yum:
+    name: "{{ item }}"
+    state: present
+  when: utils_install_user
+  with_items: "{{ utils_list_user }}"
+  ignore_errors: true
