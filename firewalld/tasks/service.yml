@@ -1,6 +1,0 @@
----
-- name: manage firewalld service
-  ansible.builtin.service:
-    name: firewalld
-    state: "{{ firewalld_service_state }}"
-    enabled: "{{ firewalld_service_enabled }}"
